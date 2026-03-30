@@ -6,7 +6,7 @@ page {
   min-height: 100vh;
   background: #f7f5ef;
   color: #2f2a24;
-  padding-bottom: 60rpx;
+  padding-bottom: 120rpx;
   box-sizing: border-box;
 }
 
@@ -337,18 +337,21 @@ page {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.92);
+  width: 220rpx;
+  height: 72rpx;
+  background: rgba(255, 255, 255, 0.95);
   border: 1rpx solid #e6dfd2;
   border-radius: 999rpx;
-  padding: 8rpx;
+  padding: 6rpx;
   box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.06);
   z-index: 20;
+  box-sizing: border-box;
 }
 
 .switch-item {
-  min-width: 120rpx;
-  height: 64rpx;
-  line-height: 64rpx;
+  flex: 1;
+  height: 60rpx;
+  line-height: 60rpx;
   text-align: center;
   font-size: 26rpx;
   color: #7e766d;
@@ -446,4 +449,16 @@ page {
   color: #b0a79c;
   line-height: 1.8;
   letter-spacing: 1rpx;
+}
+
+.main {
+  transition: opacity 0.2s ease;
+}
+
+.main.word {
+  opacity: 1;
+}
+
+.main.wordlist {
+  opacity: 1;
 }

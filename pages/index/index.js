@@ -24,13 +24,51 @@ Page({
   },
   
   switchToWord() {
-    this.setData({ mode: 'word' })
-    this.getWord()
+    wx.request({
+      url: 'https://www.ci3000.com/Ajax/AjaxGet.aspx?Action=random_word',
+      success: (res) => {
+        let data = res.data
+  
+        if (typeof data === 'string') {
+          try {
+            data = JSON.parse(data)
+          } catch (e) {
+            return
+          }
+        }
+  
+        this.setData({
+          word: data.word || {},
+          related: data.related || [],
+          tag: data.tag || '',
+          tags: data.tags || [],
+          mode: 'word'
+        })
+      }
+    })
   },
   
   switchToWordList() {
-    this.setData({ mode: 'wordlist' })
-    this.getWordList()
+    wx.request({
+      url: 'https://www.ci3000.com/Ajax/AjaxGet.aspx?Action=random_wordlist',
+      success: (res) => {
+        let data = res.data
+  
+        if (typeof data === 'string') {
+          try {
+            data = JSON.parse(data)
+          } catch (e) {
+            return
+          }
+        }
+  
+        this.setData({
+          wordlist: data.wordlist || {},
+          words: data.words || [],
+          mode: 'wordlist'
+        })
+      }
+    })
   },
 
   onLoad() {

@@ -20,7 +20,7 @@
     </view>
   </view>
 
-  <view class="main">
+  <view class="main mode-{{mode}}">
 
     <!-- 词模式 -->
     <block wx:if="{{mode === 'word'}}">
@@ -116,14 +116,13 @@
       {{item.name}}
     </view>
   </block>
-  <view class="list-hint">
+ </view>
+ <view wx:else class="empty">
+  暂无词汇
+</view>
+<view class="list-hint">
   <view>词单尚未全部展示</view>
   <view>完整版请在 www.ci3000.com 查看</view>
-</view>
-</view>
-
-<view wx:else class="empty">
-  暂无词汇
 </view>
 
 <view class="about-card">
