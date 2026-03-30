@@ -5,7 +5,32 @@ Page({
     tags: [],
     related: [],
     wordSize: 74,
-    wordSpacing: 2
+    wordSpacing: 2,
+    mode: 'word', // word / wordlist
+    wordlist: {},
+    words: []
+  },
+  getWordList() {
+    const that = this
+    wx.request({
+      url: 'https://www.ci3000.com/Ajax/AjaxGet.aspx?Action=random_wordlist',
+      success(res) {
+        that.setData({
+          wordlist: res.data.wordlist,
+          words: res.data.words
+        })
+      }
+    })
+  },
+  
+  switchToWord() {
+    this.setData({ mode: 'word' })
+    this.getWord()
+  },
+  
+  switchToWordList() {
+    this.setData({ mode: 'wordlist' })
+    this.getWordList()
   },
 
   onLoad() {

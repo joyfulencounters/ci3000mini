@@ -1,87 +1,167 @@
 <view class="page">
   <view class="topbar">
-  
-  <!-- 第一行：主标题 -->
-  <view class="brand-main">
-    <view class="brand-icon"></view>
-    <view class="brand-title">千言万语</view>
-    <view class="brand-icon"></view>
-  </view>
 
-  <!-- 第二行：副标题 -->
-  <view class="brand-sub">
-    词中知己 · 字里相逢
-  </view>
+    <!-- 第一行：主标题 -->
+    <view class="brand-main">
+      <view class="brand-icon"></view>
+      <view class="brand-title">千言万语</view>
+      <view class="brand-icon"></view>
+    </view>
+
+    <!-- 第二行：副标题 -->
+    <view class="brand-sub">
+      词中知己 · 字里相逢
+    </view>
+
     <view class="decor">
       <view class="decor-line"></view>
       <view class="decor-dot"></view>
       <view class="decor-line"></view>
     </view>
-</view>
-  <view class="main">
-
-    <view class="word-card">
-      <view class="word-center full">
-        <view
-          class="word"
-          style="font-size: {{wordSize}}rpx; letter-spacing: {{wordSpacing}}rpx;"
-        >
-        {{word.name}}
-        </view>
-
-        <view wx:if="{{tags.length > 0}}" class="tag-section">
-  
-          <view class="tag-title">✦ 共鸣签 ✦</view>
-
-  <view class="tags-wrap">
-    <block wx:for="{{tags}}" wx:key="*this">
-      <view class="tag-chip"># {{item}}</view>
-    </block>
   </view>
 
-</view>
+  <view class="main">
 
-        <view wx:else class="category">{{tag}}</view>
-      </view>
-    </view>
+    <!-- 词模式 -->
+    <block wx:if="{{mode === 'word'}}">
 
-    <button class="shuffle-btn" bindtap="getWord">随机换一个</button>
+      <view class="word-card">
+        <view class="word-center full">
+          <view
+            class="word"
+            style="font-size: {{wordSize}}rpx; letter-spacing: {{wordSpacing}}rpx;"
+          >
+            {{word.name}}
+          </view>
 
-    <view class="section-title">✦ 友邻词汇 ✦</view>
+          <view wx:if="{{tags.length > 0}}" class="tag-section">
+            <view class="tag-title">✦ 共鸣签 ✦</view>
 
-    <view wx:if="{{related.length > 0}}" class="related">
-      <block wx:for="{{related}}" wx:key="id">
-        <view class="related-item">
-          {{item.name}}
+            <view class="tags-wrap">
+              <block wx:for="{{tags}}" wx:key="*this">
+                <view class="tag-chip"># {{item}}</view>
+              </block>
+            </view>
+          </view>
+
+          <view wx:else class="category">{{tag}}</view>
         </view>
-      </block>
+      </view>
+
+      <button class="shuffle-btn" bindtap="getWord">随机换一个</button>
+
+      <view class="section-title">✦ 友邻词汇 ✦</view>
+
+      <view wx:if="{{related.length > 0}}" class="related">
+        <block wx:for="{{related}}" wx:key="id">
+          <view class="related-item">
+            {{item.name}}
+          </view>
+        </block>
+      </view>
+
+      <view wx:else class="empty">
+        暂无相关词
+      </view>
+
+      <view class="about-card">
+        <view class="about-title">关于千言万语</view>
+
+        <view class="about-text">
+          千言万语，是为热爱汉语词汇的朋友打造的一方天地。在这里，可以沉浸式地感受每一个词的美好。
+        </view>
+
+        <view class="about-text">
+          每个词都有「共鸣签」，记录着大家对它的真切感受；而「友邻词汇」则展示与当前主题词气质相近的其他词语。
+        </view>
+
+        <view class="about-link-label">
+          体验完整功能，请访问：
+        </view>
+
+        <view class="about-link">www.ci3000.com</view>
+      </view>
+
+    </block>
+
+    <!-- 词单模式 -->
+    <block wx:elif="{{mode === 'wordlist'}}">
+
+<view class="list-card">
+  <view class="list-badge">精选词单</view>
+
+  <view class="list-title">
+    {{wordlist.name}}
+  </view>
+
+  <view wx:if="{{wordlist.content}}" class="list-desc">
+    {{wordlist.content}}
+  </view>
+
+  <view class="list-meta">
+    <view class="list-meta-line"></view>
+    <view class="list-meta-text">收录 {{wordlist.count}} 词</view>
+    <view class="list-meta-line"></view>
+  </view>
+</view>
+
+<button class="shuffle-btn" bindtap="getWordList">随机换一个</button>
+
+<view class="section-title">✦ 收录词汇 ✦</view>
+
+<view wx:if="{{words.length > 0}}" class="wordlist-grid">
+
+  <block wx:for="{{words}}" wx:key="id">
+    <view class="wordlist-chip">
+      {{item.name}}
+    </view>
+  </block>
+  <view class="list-hint">
+  <view>词单尚未全部展示</view>
+  <view>完整版请在 www.ci3000.com 查看</view>
+</view>
+</view>
+
+<view wx:else class="empty">
+  暂无词汇
+</view>
+
+<view class="about-card">
+  <view class="about-title">关于千言万语</view>
+
+  <view class="about-text">
+    千言万语，是为热爱汉语词汇的朋友打造的一方天地。在这里，可以沉浸式地感受每一个词的美好。
+  </view>
+
+  <view class="about-text">
+    词单功能帮助你一次发现一组气质相近、可以彼此映照的词语。
+  </view>
+
+  <view class="about-link-label">
+    体验完整功能，请访问：
+  </view>
+
+  <view class="about-link">www.ci3000.com</view>
+</view>
+
+</block>
+
+  </view>
+
+  <!-- 底部切换 -->
+  <view class="bottom-switch">
+    <view
+      class="switch-item {{mode === 'word' ? 'active' : ''}}"
+      bindtap="switchToWord"
+    >
+      词
     </view>
 
-    <view wx:else class="empty">
-      暂无相关词
+    <view
+      class="switch-item {{mode === 'wordlist' ? 'active' : ''}}"
+      bindtap="switchToWordList"
+    >
+      词单
     </view>
-
-    <view class="about-card">
-
-<view class="about-title">关于千言万语</view>
-
-<view class="about-text">
-  千言万语，是为热爱汉语词汇的朋友打造的一方天地。在这里，可以沉浸式地感受每一个词的美好。
-</view>
-
-  
-
-
-<view class="about-text">
-  每个词都有「共鸣签」，记录着大家对它的真切感受；而「友邻词汇」则展示与当前主题词气质相近的其他词语。
-</view>
-
-<view class="about-link-label">
-  体验完整功能，请访问：
-</view>
-
-<view class="about-link">www.ci3000.com</view>
-
-</view>
   </view>
 </view>
