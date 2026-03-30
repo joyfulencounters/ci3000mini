@@ -1,0 +1,87 @@
+<view class="page">
+  <view class="topbar">
+  
+  <!-- 第一行：主标题 -->
+  <view class="brand-main">
+    <view class="brand-icon"></view>
+    <view class="brand-title">千言万语</view>
+    <view class="brand-icon"></view>
+  </view>
+
+  <!-- 第二行：副标题 -->
+  <view class="brand-sub">
+    词中知己 · 字里相逢
+  </view>
+    <view class="decor">
+      <view class="decor-line"></view>
+      <view class="decor-dot"></view>
+      <view class="decor-line"></view>
+    </view>
+</view>
+  <view class="main">
+
+    <view class="word-card">
+      <view class="word-center full">
+        <view
+          class="word"
+          style="font-size: {{wordSize}}rpx; letter-spacing: {{wordSpacing}}rpx;"
+        >
+        {{word.name}}
+        </view>
+
+        <view wx:if="{{tags.length > 0}}" class="tag-section">
+  
+          <view class="tag-title">✦ 共鸣签 ✦</view>
+
+  <view class="tags-wrap">
+    <block wx:for="{{tags}}" wx:key="*this">
+      <view class="tag-chip"># {{item}}</view>
+    </block>
+  </view>
+
+</view>
+
+        <view wx:else class="category">{{tag}}</view>
+      </view>
+    </view>
+
+    <button class="shuffle-btn" bindtap="getWord">随机换一个</button>
+
+    <view class="section-title">✦ 友邻词汇 ✦</view>
+
+    <view wx:if="{{related.length > 0}}" class="related">
+      <block wx:for="{{related}}" wx:key="id">
+        <view class="related-item">
+          {{item.name}}
+        </view>
+      </block>
+    </view>
+
+    <view wx:else class="empty">
+      暂无相关词
+    </view>
+
+    <view class="about-card">
+
+<view class="about-title">关于千言万语</view>
+
+<view class="about-text">
+  千言万语，是为热爱汉语词汇的朋友打造的一方天地。在这里，可以沉浸式地感受每一个词的美好。
+</view>
+
+  
+
+
+<view class="about-text">
+  每个词都有「共鸣签」，记录着大家对它的真切感受；而「友邻词汇」则展示与当前主题词气质相近的其他词语。
+</view>
+
+<view class="about-link-label">
+  体验完整功能，请访问：
+</view>
+
+<view class="about-link">www.ci3000.com</view>
+
+</view>
+  </view>
+</view>
