@@ -337,19 +337,24 @@ page {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 220rpx;
+
+  /* ⭐ 改这里 */
+  width: auto;          /* 或直接删除 width */
+
   height: 72rpx;
   background: rgba(255, 255, 255, 0.95);
   border: 1rpx solid #e6dfd2;
   border-radius: 999rpx;
-  padding: 6rpx;
+  padding: 6rpx 12rpx;  /* ⭐ 左右多一点空间 */
+  gap: 8rpx;            /* ⭐ 按钮间距 */
+
   box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.06);
   z-index: 20;
   box-sizing: border-box;
 }
 
 .switch-item {
-  flex: 1;
+  padding: 0 24rpx;   /* ⭐ 关键：左右留白 */
   height: 60rpx;
   line-height: 60rpx;
   text-align: center;
@@ -357,12 +362,16 @@ page {
   color: #7e766d;
   border-radius: 999rpx;
   transition: all 0.2s ease;
+
+  flex: none;          /* ⭐ 不再平均分 */
 }
 
 .switch-item.active {
   background: #6c9f84;
   color: #ffffff;
   font-weight: 600;
+
+  box-shadow: 0 4rpx 10rpx rgba(108, 159, 132, 0.3); /* ⭐ 轻微发光 */
 }
 
 /* ===== 词单页专属样式 ===== */

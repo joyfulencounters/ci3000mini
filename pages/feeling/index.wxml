@@ -1,0 +1,65 @@
+<view class="page">
+  <view class="topbar">
+    <view class="brand-main">
+      <view class="brand-icon"></view>
+      <view class="brand-title">凭感觉</view>
+      <view class="brand-icon"></view>
+    </view>
+
+    <view class="brand-sub">
+      输入一种感觉，看看哪些词与你共鸣
+    </view>
+
+    <view class="decor">
+      <view class="decor-line"></view>
+      <view class="decor-dot"></view>
+      <view class="decor-line"></view>
+    </view>
+  </view>
+
+  <view class="search-box">
+    <input
+  class="search-input"
+  placeholder="{{placeholderText}}"
+  value="{{inputValue}}"
+  bindinput="onInput"
+  bindfocus="onFocusInput"
+  bindblur="onBlurInput"
+  confirm-type="search"
+  bindconfirm="onSearch"
+/>
+    <view class="search-btn" bindtap="onSearch">搜索</view>
+  </view>
+
+  <view wx:if="{{tag}}" class="result-bar">
+    <text class="result-text">与“{{tag}}”有关的词，共 {{rowCount}} 个</text>
+  </view>
+
+  <view wx:if="{{loading}}" class="state-text">正在寻找与你共鸣的词…</view>
+
+  <view wx:if="{{!loading && list.length === 0}}" class="state-text">
+    {{emptyText}}
+  </view>
+
+  <view wx:if="{{list.length > 0}}" class="feeling-list">
+  <block wx:for="{{list}}" wx:key="id">
+    <view class="feeling-card" data-id="{{item.id}}" bindtap="goWordDetail">
+      <view class="feeling-word">{{item.name}}</view>
+    </view>
+  </block>
+</view>
+
+<view wx:if="{{loadingMore}}" class="load-more-text">
+  正在加载更多...
+</view>
+
+<view wx:if="{{!hasMore && list.length > 0}}" class="load-more-text">
+  已经到底了
+</view>
+
+  <view class="bottom-switch">
+    <view class="switch-item" bindtap="goWordHome">词</view>
+    <view class="switch-item" bindtap="goWordListHome">词单</view>
+    <view class="switch-item active">凭感觉</view>
+  </view>
+</view>
