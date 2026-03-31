@@ -63,7 +63,7 @@
 </view>
 
       <view wx:else class="empty">
-        暂无相关词
+        暂无相关的词
       </view>
 
       <view class="about-card">
