@@ -305,7 +305,7 @@ page {
 /* 标题：共鸣签 */
 .tag-title {
   font-size: 22rpx;
-  color: #9f968b;
+  color: #16915e;
 
   letter-spacing: 4rpx;
 
@@ -470,4 +470,66 @@ page {
 
 .main.wordlist {
   opacity: 1;
+}
+
+.wordlist-module {
+  width: 100%;
+  max-width: 560rpx;
+  margin: 46rpx auto 0;
+  align-self: center;
+}
+
+.wordlist-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+
+.wordlist-item {
+  position: relative;
+  background: linear-gradient(180deg, rgba(255,255,255,0.78) 0%, rgba(250,247,241,0.92) 100%);
+  border: 1rpx solid #e7ddd0;
+  border-radius: 24rpx;
+  padding: 24rpx 52rpx 24rpx 28rpx;
+  box-sizing: border-box;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.03);
+}
+
+.wordlist-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 18rpx;
+  bottom: 18rpx;
+  width: 8rpx;
+  border-radius: 8rpx;
+  background: linear-gradient(180deg, #9dbfae 0%, #6c9f84 100%);
+}
+
+.wordlist-item::after {
+  content: "›";
+  position: absolute;
+  right: 22rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 34rpx;
+  color: #b7aea2;
+  line-height: 1;
+}
+
+.wordlist-item:active {
+  transform: scale(0.985);
+  background: rgba(245, 240, 232, 0.96);
+}
+
+.wordlist-name {
+  font-size: 30rpx;
+  line-height: 1.5;
+  color: #2f2a24;
+  letter-spacing: 1rpx;
+  padding-left: 10rpx;
+}
+
+.wordlist-desc {
+  display: none;
 }
