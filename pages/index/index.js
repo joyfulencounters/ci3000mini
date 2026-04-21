@@ -14,18 +14,31 @@ Page({
   presetTags: ['清冷', '温柔', '明亮', '凛冽', '怅然', '坦荡','豁达','寂寞','凄凉','快乐'],
   selectedPresetTag: '',
   submitting: false,
+  comments: [],
+  commentText: '',
   customTag: ''
 
   },
 
   onLoad(options) {
-      // 👇 加这一段（登录）
+    const cachedOpenid = wx.getStorageSync('openid')
+    const cachedUserid = wx.getStorageSync('userid')
+  
+    if (cachedOpenid && cachedUserid) {
+      this.setData({
+        openid: cachedOpenid,
+        userid: cachedUserid
+      })
+  
+      console.log('✅ 使用缓存 openid=', cachedOpenid)
+      console.log('✅ 使用缓存 userid=', cachedUserid)
+    } else {
       wx.login({
         success: (res) => {
           const code = res.code
-    
+  
           console.log('wx.login code=', code)
-    
+  
           wx.request({
             url: 'https://www.ci3000.com/Ajax/AjaxGet.aspx',
             data: {
@@ -34,7 +47,7 @@ Page({
             },
             success: (r) => {
               let data = r.data
-    
+  
               if (typeof data === 'string') {
                 try {
                   data = JSON.parse(data)
@@ -43,23 +56,20 @@ Page({
                   return
                 }
               }
-    
+  
               console.log('wx_login返回=', data)
-    
-              // ✅ 核心修改在这里
+  
               if (data && data.success) {
-    
                 wx.setStorageSync('openid', data.openid)
                 wx.setStorageSync('userid', data.userid)
-    
+  
                 this.setData({
                   openid: data.openid,
-                  userid: data.userid   // ⭐ 必须有
+                  userid: data.userid
                 })
-    
+  
                 console.log('✅ openid=', data.openid)
                 console.log('✅ userid=', data.userid)
-    
               } else {
                 console.log('❌ 登录失败', data)
               }
@@ -68,13 +78,15 @@ Page({
               console.log('wx_login请求失败', err)
             }
           })
+        },
+        fail: (err) => {
+          console.log('wx.login失败', err)
         }
       })
-    
-
-  // 👇 原来的逻辑继续
+    }
+  
     console.log('onLoad options:', options)
-
+  
     if (options && options.mode === 'wordlist') {
       console.log('进入词单模式, id =', options.id)
       this.getWordList(options.id)
@@ -107,13 +119,15 @@ Page({
           tags: data.tags || [],
           wordlists: [],
           mode: 'word'
+        }, () => {
+          this.loadComments()
+        
+          if (data.word && data.word.id) {
+            this.getWordLists(data.word.id)
+          }
+        
+          this.playSwitchAnimation()
         })
-
-        if (data.word && data.word.id) {
-          this.getWordLists(data.word.id)
-        }
-
-        this.playSwitchAnimation()
       },
       fail(err) {
         console.log('请求失败', err)
@@ -148,11 +162,13 @@ Page({
             tags: data.tags || [],
             wordlists: [],
             mode: 'word'
+          }, () => {
+            this.loadComments()
+          
+            if (data.word && data.word.id) {
+              this.getWordLists(data.word.id)
+            }
           })
-
-          if (data.word && data.word.id) {
-            this.getWordLists(data.word.id)
-          }
         } else {
           wx.showToast({
             title: data.msg || '未找到该词',
@@ -267,9 +283,10 @@ Page({
           wordlist: wordlist,
           words: words,
           mode: 'wordlist'
+        }, () => {
+          this.loadComments()
+          this.playSwitchAnimation()
         })
-
-        this.playSwitchAnimation()
       },
       fail(err) {
         console.log('请求失败', err)
@@ -390,6 +407,8 @@ Page({
       customTag: e.detail.value || ''
     })
   },
+
+
   
   submitTag() {
     if (this.data.submitting) return
@@ -490,6 +509,182 @@ Page({
         })
       }
     })
-  }
+  },
+  onCommentInput(e) {
+    this.setData({
+      commentText: e.detail.value || ''
+    })
+  },
 
+
+  loadComments() {
+    console.log('loadComments mode=', this.data.mode)
+    console.log('loadComments word=', this.data.word, 'wordlist=', this.data.wordlist)
+  
+    const mode = this.data.mode
+  
+    if (mode === 'word') {
+      const word = this.data.word || {}
+      if (!word.id) {
+        this.setData({ comments: [] })
+        return
+      }
+  
+      wx.request({
+        url: 'https://www.ci3000.com/Ajax/AjaxGet.aspx',
+        data: {
+          Action: 'get_word_comments',
+          wid: word.id
+        },
+        success: (res) => {
+          let data = res.data
+          if (typeof data === 'string') {
+            try { data = JSON.parse(data) } catch (e) {}
+          }
+  
+          console.log('get_word_comments 返回=', data)
+  
+          this.setData({
+            comments: (data && data.list) || []
+          }, () => {
+            console.log('comments长度=', this.data.comments.length)
+            console.log('comments首条=', this.data.comments[0])
+          })
+        },
+        fail: (err) => {
+          console.log('get_word_comments 失败=', err)
+          this.setData({ comments: [] })
+        }
+      })
+    }
+  
+    if (mode === 'wordlist') {
+      const wordlist = this.data.wordlist || {}
+      if (!wordlist.id) {
+        this.setData({ comments: [] })
+        return
+      }
+  
+      wx.request({
+        url: 'https://www.ci3000.com/Ajax/AjaxGet.aspx',
+        data: {
+          Action: 'get_wordlist_comments',
+          wlid: wordlist.id
+        },
+        success: (res) => {
+          let data = res.data
+          if (typeof data === 'string') {
+            try { data = JSON.parse(data) } catch (e) {}
+          }
+  
+          console.log('get_wordlist_comments 返回=', data)
+  
+          this.setData({
+            comments: (data && data.list) || []
+          })
+        },
+        fail: (err) => {
+          console.log('get_wordlist_comments 失败=', err)
+          this.setData({ comments: [] })
+        }
+      })
+    }
+  },
+
+  submitComment() {
+    const userid = wx.getStorageSync('userid')
+    const mode = this.data.mode
+    const content = (this.data.commentText || '').trim()
+  
+    if (!userid) {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none'
+      })
+      return
+    }
+  
+    if (!content) {
+      wx.showToast({
+        title: '请输入评论',
+        icon: 'none'
+      })
+      return
+    }
+  
+    if (content.length < 2 || content.length > 100) {
+      wx.showToast({
+        title: '评论需2-100字',
+        icon: 'none'
+      })
+      return
+    }
+  
+    let url = ''
+    let postData = {
+      userid: userid,
+      content: content
+    }
+  
+    if (mode === 'word') {
+      const word = this.data.word || {}
+      if (!word.id) return
+      postData.wid = word.id
+      url = 'https://www.ci3000.com/Ajax/AjaxGet.aspx?Action=add_word_comment'
+    }
+  
+    if (mode === 'wordlist') {
+      const wordlist = this.data.wordlist || {}
+      if (!wordlist.id) return
+      postData.wlid = wordlist.id
+      url = 'https://www.ci3000.com/Ajax/AjaxGet.aspx?Action=add_wordlist_comment'
+    }
+  
+    wx.request({
+      url: url,
+      method: 'POST',
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      data: postData,
+      success: (res) => {
+        let data = res.data
+  
+        if (typeof data === 'string') {
+          try {
+            data = JSON.parse(data)
+          } catch (e) {
+            console.log('发表评论返回解析失败=', data)
+          }
+        }
+  
+        console.log('add_comment 返回=', data)
+  
+        if (data && data.success) {
+          wx.showToast({
+            title: '评论成功',
+            icon: 'success'
+          })
+  
+          this.setData({
+            commentText: ''
+          })
+  
+          this.loadComments()
+        } else {
+          wx.showToast({
+            title: (data && data.msg) || '评论失败',
+            icon: 'none'
+          })
+        }
+      },
+      fail: (err) => {
+        console.log('发表评论失败=', err)
+        wx.showToast({
+          title: '网络异常',
+          icon: 'none'
+        })
+      }
+    })
+  }
 })

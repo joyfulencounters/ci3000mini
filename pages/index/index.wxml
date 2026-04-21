@@ -94,6 +94,40 @@
           </block>
         </view>
       </view>
+     
+      <view class="comment-section">
+
+  <view class="section-title">✦ 大家说 ✦</view>
+
+  <view class="comment-input-box">
+    <input
+      class="comment-input"
+      placeholder="一起来说说"
+      value="{{commentText}}"
+      bindinput="onCommentInput"
+      maxlength="100"
+    />
+    <view class="comment-submit-btn" bindtap="submitComment">发表</view>
+  </view>
+
+  <block wx:if="{{comments.length > 0}}">
+    <view class="comment-list">
+      <block wx:for="{{comments}}" wx:key="id">
+        <view class="comment-item">
+          <view class="comment-user">{{item.nickname}}</view>
+          <view class="comment-content">{{item.content}}</view>
+          <view class="comment-time">{{item.addtime}}</view>
+        </view>
+      </block>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="empty">这里空空如也，不妨由你先说</view>
+  </block>
+</view>
+
+
 
       <view class="about-card">
         <view class="about-title">关于千言万语</view>
@@ -164,7 +198,32 @@
         <view>词单尚未全部展示</view>
         <view>完整版请在 www.ci3000.com 查看</view>
       </view>
+      <view class="comment-section">
+  <view class="section-title">✦ 词单评论 ✦</view>
 
+  <view class="comment-input-box">
+    <input
+      class="comment-input"
+      placeholder="写一句你的感受"
+      value="{{commentText}}"
+      bindinput="onCommentInput"
+      maxlength="100"
+    />
+    <view class="comment-submit-btn" bindtap="submitComment">发表</view>
+  </view>
+
+  <view wx:if="{{comments.length > 0}}" class="comment-list">
+    <block wx:for="{{comments}}" wx:key="id">
+      <view class="comment-item">
+        <view class="comment-user">{{item.nickname}}</view>
+        <view class="comment-content">{{item.content}}</view>
+        <view class="comment-time">{{item.addtime}}</view>
+      </view>
+    </block>
+  </view>
+
+  <view wx:else class="empty">还没有评论</view>
+</view>
       <view class="about-card">
         <view class="about-title">关于千言万语</view>
 
@@ -192,7 +251,7 @@
 <view wx:if="{{showTagPopup}}" class="tag-popup">
   <view class="tag-popup-title">添加共鸣签</view>
 
-  <view class="tag-popup-subtitle">你对这个词的感受是什么</view>
+  <view class="tag-popup-subtitle">你对这个词的感受是什么（请勿超过8个汉字）</view>
 
   <view class="tag-preset-list">
     <block wx:for="{{presetTags}}" wx:key="*this">

@@ -15,21 +15,85 @@ Page({
   },
 
   onLoad(options) {
-    const tag = options.tag ? decodeURIComponent(options.tag) : ''
+    const cachedOpenid = wx.getStorageSync('openid')
+    const cachedUserid = wx.getStorageSync('userid')
   
-    if (tag) {
+    if (cachedOpenid && cachedUserid) {
+      this.setData({
+        openid: cachedOpenid,
+        userid: cachedUserid
+      })
+  
+      console.log('✅ 使用缓存 openid=', cachedOpenid)
+      console.log('✅ 使用缓存 userid=', cachedUserid)
+    } else {
+      wx.login({
+        success: (res) => {
+          const code = res.code
+  
+          console.log('wx.login code=', code)
+  
+          wx.request({
+            url: 'https://www.ci3000.com/Ajax/AjaxGet.aspx',
+            data: {
+              Action: 'wx_login',
+              code: code
+            },
+            success: (r) => {
+              let data = r.data
+  
+              if (typeof data === 'string') {
+                try {
+                  data = JSON.parse(data)
+                } catch (e) {
+                  console.error('wx_login解析失败', data)
+                  return
+                }
+              }
+  
+              console.log('wx_login返回=', data)
+  
+              if (data && data.success) {
+                wx.setStorageSync('openid', data.openid)
+                wx.setStorageSync('userid', data.userid)
+  
+                this.setData({
+                  openid: data.openid,
+                  userid: data.userid
+                })
+  
+                console.log('✅ openid=', data.openid)
+                console.log('✅ userid=', data.userid)
+              } else {
+                console.log('❌ 登录失败', data)
+              }
+            },
+            fail: (err) => {
+              console.log('wx_login请求失败', err)
+            }
+          })
+        },
+        fail: (err) => {
+          console.log('wx.login失败', err)
+        }
+      })
+    }
+  
+    console.log('feeling onLoad options=', options)
+  
+    if (options && options.tag) {
+      const tag = decodeURIComponent(options.tag)
+  
       this.setData({
         tag: tag,
         inputValue: tag,
-        placeholderText: ''
+        list: [],
+        rowCount: 0,
+        page: 1,
+        hasMore: true
       })
+  
       this.fetchWordsByTag(tag, 1)
-    } else {
-      this.setData({
-        tag: '',
-        inputValue: '',
-        placeholderText: '幸福/美好/惆怅/遗憾...'
-      })
     }
   },
 

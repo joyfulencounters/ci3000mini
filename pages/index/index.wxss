@@ -247,6 +247,8 @@ page {
   font-weight: 700;
 }
 
+
+
 /* 关于卡片 */
 .about-card {
   margin-top: 64rpx;
@@ -672,4 +674,67 @@ page {
 .tag-popup-btn.confirm {
   background: #d9cfbf;
   color: #2f2a24;
+}
+
+.comment-section {
+  width: 100%;
+  max-width: 560rpx;
+  margin-top: 50rpx;
+}
+
+.comment-input-box {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+
+.comment-input {
+  background: rgba(255,255,255,0.9);
+  border: 1rpx solid #e8dfd2;
+  border-radius: 18rpx;
+  padding: 20rpx 22rpx;
+  font-size: 28rpx;
+  color: #2f2a24;
+}
+
+.comment-submit-btn {
+  align-self: flex-end;
+  padding: 12rpx 28rpx;
+  border-radius: 999rpx;
+  background: rgba(108, 159, 132, 0.12);
+  border: 1rpx solid rgba(108, 159, 132, 0.25);
+  color: #4e7e66;
+  font-size: 24rpx;
+}
+
+.comment-list {
+  margin-top: 24rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+
+.comment-item {
+  background: rgba(255,255,255,0.72);
+  border: 1rpx solid #e8dfd2;
+  border-radius: 22rpx;
+  padding: 22rpx 24rpx;
+}
+
+.comment-user {
+  font-size: 24rpx;
+  color: #6c9f84;
+  margin-bottom: 10rpx;
+}
+
+.comment-content {
+  font-size: 28rpx;
+  color: #2f2a24;
+  line-height: 1.8;
+}
+
+.comment-time {
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  color: #a39a8f;
 }
