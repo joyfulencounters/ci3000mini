@@ -9,10 +9,70 @@ Page({
     mode: 'word',
     wordlist: {},
     words: [],
-    wordlists: []
+    wordlists: [],
+    showTagPopup: false,
+  presetTags: ['清冷', '温柔', '明亮', '凛冽', '怅然', '坦荡','豁达','寂寞','凄凉','快乐'],
+  selectedPresetTag: '',
+  submitting: false,
+  customTag: ''
+
   },
 
   onLoad(options) {
+      // 👇 加这一段（登录）
+      wx.login({
+        success: (res) => {
+          const code = res.code
+    
+          console.log('wx.login code=', code)
+    
+          wx.request({
+            url: 'https://www.ci3000.com/Ajax/AjaxGet.aspx',
+            data: {
+              Action: 'wx_login',
+              code: code
+            },
+            success: (r) => {
+              let data = r.data
+    
+              if (typeof data === 'string') {
+                try {
+                  data = JSON.parse(data)
+                } catch (e) {
+                  console.error('wx_login解析失败', data)
+                  return
+                }
+              }
+    
+              console.log('wx_login返回=', data)
+    
+              // ✅ 核心修改在这里
+              if (data && data.success) {
+    
+                wx.setStorageSync('openid', data.openid)
+                wx.setStorageSync('userid', data.userid)
+    
+                this.setData({
+                  openid: data.openid,
+                  userid: data.userid   // ⭐ 必须有
+                })
+    
+                console.log('✅ openid=', data.openid)
+                console.log('✅ userid=', data.userid)
+    
+              } else {
+                console.log('❌ 登录失败', data)
+              }
+            },
+            fail: (err) => {
+              console.log('wx_login请求失败', err)
+            }
+          })
+        }
+      })
+    
+
+  // 👇 原来的逻辑继续
     console.log('onLoad options:', options)
 
     if (options && options.mode === 'wordlist') {
@@ -297,5 +357,139 @@ Page({
 
   playSwitchAnimation() {
     // 你原来如果已经有这个方法，就保留你自己的内容
+  },
+
+  openTagPopup() {
+    console.log('点到了添加共鸣签')
+    if (this.data.mode !== 'word') return
+  
+    this.setData({
+      showTagPopup: true,
+      selectedPresetTag: '',
+      customTag: ''
+    })
+  },
+  
+  closeTagPopup() {
+    this.setData({
+      showTagPopup: false,
+      selectedPresetTag: '',
+      customTag: ''
+    })
+  },
+  
+  selectPresetTag(e) {
+    const tag = e.currentTarget.dataset.tag || ''
+    this.setData({
+      selectedPresetTag: tag
+    })
+  },
+  
+  onCustomTagInput(e) {
+    this.setData({
+      customTag: e.detail.value || ''
+    })
+  },
+  
+  submitTag() {
+    if (this.data.submitting) return
+    this.setData({ submitting: true })
+    const userid = wx.getStorageSync('userid')   // ✅ 改这里
+    const word = this.data.word || {}
+    const customTag = (this.data.customTag || '').trim()
+    const selectedPresetTag = (this.data.selectedPresetTag || '').trim()
+    const finalTag = customTag || selectedPresetTag
+  
+    console.log('submitTag userid=', userid)
+    console.log('submitTag word=', word)
+    console.log('submitTag finalTag=', finalTag)
+  
+    if (!userid) {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none'
+      })
+      return
+    }
+  
+    if (!word || !word.id) {
+      wx.showToast({
+        title: '当前词ID不存在',
+        icon: 'none'
+      })
+      return
+    }
+  
+    if (!finalTag) {
+      wx.showToast({
+        title: '请选择或输入共鸣签',
+        icon: 'none'
+      })
+      return
+    }
+  
+    if (finalTag.length < 2 || finalTag.length > 8) {
+      wx.showToast({
+        title: '共鸣签需2-8个字',
+        icon: 'none'
+      })
+      return
+    }
+  
+    wx.request({
+      url: 'https://www.ci3000.com/Ajax/AjaxGet.aspx?Action=add_tag',
+      method: 'POST',
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      data: {
+        wid: word.id,        // ✅ w_id → wid
+        tag: finalTag,
+        userid: userid       // ✅ openid → userid
+      },
+      success: (res) => {
+        this.setData({ submitting: false }) 
+        console.log('add_tag 返回：', res.data)
+  
+        let data = res.data
+  
+        if (typeof data === 'string') {
+          try {
+            data = JSON.parse(data)
+          } catch (e) {
+            console.error('add_tag 返回解析失败', data)
+          }
+        }
+  
+        if (data && data.success) {
+          wx.showToast({
+            title: '添加成功',
+            icon: 'success'
+          })
+  
+          this.setData({
+            showTagPopup: false,
+            selectedPresetTag: '',
+            customTag: ''
+          })
+  
+          this.getWordById(word.id)
+        } else {
+          wx.showToast({
+            title: (data && data.msg) || '添加失败',
+            icon: 'none'
+          })
+        }
+      },
+      fail: (err) => {
+        this.setData({ submitting: false }) 
+        console.log('add_tag 请求失败', err)
+        wx.showToast({
+          title: '网络异常',
+          icon: 'none'
+        })
+      }
+    })
   }
+
 })

@@ -35,18 +35,30 @@
           </view>
 
           <view wx:if="{{tags.length > 0}}" class="tag-section">
-            <view class="tag-title">✦ 共鸣签 ✦</view>
+  <view class="tag-title">✦ 共鸣签 ✦</view>
 
-            <view class="tags-wrap">
-              <block wx:for="{{tags}}" wx:key="*this">
-                <view class="tag-chip clickable-tag" data-tag="{{item}}" bindtap="goFeeling">
-                  # {{item}}
-                </view>
-              </block>
-            </view>
-          </view>
+  <view class="tags-wrap">
+    <block wx:for="{{tags}}" wx:key="*this">
+      <view class="tag-chip clickable-tag" data-tag="{{item}}" bindtap="goFeeling">
+        # {{item}}
+      </view>
+    </block>
+  </view>
 
-          <view wx:else class="category">{{tag}}</view>
+  <view class="tag-action-wrap">
+    <view class="tag-add-entry" bindtap="openTagPopup">+ 添加共鸣签</view>
+  </view>
+</view>
+
+<view wx:else class="tag-section">
+  <view class="tag-title">✦ 共鸣签 ✦</view>
+
+  <view class="category">{{tag}}</view>
+
+  <view class="tag-action-wrap">
+    <view class="tag-add-entry" bindtap="openTagPopup">+ 添加共鸣签</view>
+  </view>
+</view>
         </view>
       </view>
 
@@ -174,7 +186,39 @@
     </block>
 
   </view>
+<!-- 添加共鸣签弹层 -->
+<view wx:if="{{showTagPopup}}" class="tag-popup-mask" bindtap="closeTagPopup"></view>
 
+<view wx:if="{{showTagPopup}}" class="tag-popup">
+  <view class="tag-popup-title">添加共鸣签</view>
+
+  <view class="tag-popup-subtitle">你对这个词的感受是什么</view>
+
+  <view class="tag-preset-list">
+    <block wx:for="{{presetTags}}" wx:key="*this">
+      <view
+        class="tag-preset-item {{selectedPresetTag === item ? 'active' : ''}}"
+        data-tag="{{item}}"
+        bindtap="selectPresetTag"
+      >
+        {{item}}
+      </view>
+    </block>
+  </view>
+
+  <input
+    class="tag-custom-input"
+    placeholder="或者，写下属于你的答案"
+    value="{{customTag}}"
+    bindinput="onCustomTagInput"
+    maxlength="8"
+  />
+
+  <view class="tag-popup-actions">
+    <view class="tag-popup-btn cancel" bindtap="closeTagPopup">取消</view>
+    <view class="tag-popup-btn confirm" bindtap="submitTag">添加</view>
+  </view>
+</view>
   <!-- 底部切换 -->
   <view class="bottom-switch">
     <view

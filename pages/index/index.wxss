@@ -533,3 +533,143 @@ page {
 .wordlist-desc {
   display: none;
 }
+
+.tag-action-wrap {
+  margin-top: 18rpx;
+  display: flex;
+  justify-content: center;
+}
+
+.tag-add-entry {
+  font-size: 24rpx;
+  color: #6c9f84;
+
+  padding: 10rpx 24rpx;
+  border-radius: 999rpx;
+
+  background: rgba(108, 159, 132, 0.10);
+  border: 1rpx solid rgba(108, 159, 132, 0.25);
+
+  letter-spacing: 1rpx;
+}
+
+.tag-add-entry:active {
+  transform: scale(0.96);
+  background: rgba(108, 159, 132, 0.18);
+}
+
+.tag-action-wrap {
+  margin-top: 18rpx;
+  display: flex;
+  justify-content: center;
+}
+
+.tag-add-entry {
+  font-size: 24rpx;
+  color: #6c9f84;
+  padding: 10rpx 24rpx;
+  border-radius: 999rpx;
+  background: rgba(108, 159, 132, 0.10);
+  border: 1rpx solid rgba(108, 159, 132, 0.25);
+  letter-spacing: 1rpx;
+  margin-top: 15rpx;
+}
+
+.tag-add-entry:active {
+  transform: scale(0.96);
+  background: rgba(108, 159, 132, 0.18);
+}
+
+.tag-popup-mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.22);
+  z-index: 98;
+}
+
+.tag-popup {
+  position: fixed;
+  left: 40rpx;
+  right: 40rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #f8f4ee;
+  border-radius: 28rpx;
+  padding: 36rpx 30rpx 30rpx;
+  z-index: 99;
+  box-shadow: 0 16rpx 48rpx rgba(0, 0, 0, 0.12);
+}
+
+.tag-popup-title {
+  text-align: center;
+  font-size: 32rpx;
+  color: #2f2a24;
+  font-weight: 500;
+}
+
+.tag-popup-subtitle {
+  margin-top: 14rpx;
+  text-align: center;
+  font-size: 24rpx;
+  color: #8a8175;
+}
+
+.tag-preset-list {
+  margin-top: 28rpx;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18rpx;
+  justify-content: center;
+}
+
+.tag-preset-item {
+  padding: 12rpx 24rpx;
+  border-radius: 999rpx;
+  font-size: 26rpx;
+  color: #5f564b;
+  background: rgba(255,255,255,0.8);
+  border: 1rpx solid #e4d9cb;
+}
+
+.tag-preset-item.active {
+  background: #e9dfd2;
+  border-color: #cbbca7;
+  color: #3e372f;
+}
+
+.tag-custom-input {
+  margin-top: 28rpx;
+  background: rgba(255,255,255,0.95);
+  border: 1rpx solid #e2d7ca;
+  border-radius: 16rpx;
+  padding: 18rpx 20rpx;
+  font-size: 28rpx;
+  color: #2f2a24;
+}
+
+.tag-popup-actions {
+  margin-top: 30rpx;
+  display: flex;
+  gap: 20rpx;
+}
+
+.tag-popup-btn {
+  flex: 1;
+  text-align: center;
+  padding: 18rpx 0;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+}
+
+.tag-popup-btn.cancel {
+  background: #efe7dc;
+  color: #6f665b;
+}
+
+.tag-popup-btn.confirm {
+  background: #d9cfbf;
+  color: #2f2a24;
+}
